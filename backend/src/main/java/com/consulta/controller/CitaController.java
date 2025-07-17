@@ -1,13 +1,26 @@
 package com.consulta.controller;
 
-import com.consulta.model.*;
-import com.consulta.repository.*;
-import org.springframework.web.bind.annotation.*;
-
 import java.time.LocalDate;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.consulta.model.Cita;
+import com.consulta.model.Medico;
+import com.consulta.model.Paciente;
+import com.consulta.repository.CitaRepository;
+import com.consulta.repository.MedicoRepository;
+import com.consulta.repository.PacienteRepository;
 
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("/citas")
 public class CitaController {
 
