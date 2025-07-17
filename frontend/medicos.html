@@ -21,6 +21,9 @@
                 <li class="nav-item"><a class="nav-link" href="index.html">Inicio</a></li>
                 <li class="nav-item"><a class="nav-link active" href="medicos.html">Médicos</a></li>
                 <li class="nav-item"><a class="nav-link" href="citas.html">Mis Citas</a></li>
+                <li class="nav-item">
+                    <button id="logoutBtn" class="btn btn-outline-light ms-3">Cerrar sesión</button>
+                </li>
             </ul>
         </div>
     </div>
@@ -56,6 +59,11 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
+    // Proteger la página: solo usuarios logueados pueden acceder
+if (!localStorage.getItem('usuario')) {
+    window.location.href = 'login.html';
+}
+
     async function cargarMedicos() {
         try {
             const respuesta = await fetch('http://localhost:8080/medicos');
@@ -97,6 +105,11 @@
         // También puedes cargar los médicos automáticamente al iniciar si quieres:
         // cargarMedicos();
     });
+
+    document.getElementById('logoutBtn').addEventListener('click', function() {
+    localStorage.removeItem('usuario');
+    window.location.href = 'login.html';
+});
 </script>
 
 </body>
