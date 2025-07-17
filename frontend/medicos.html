@@ -2,31 +2,31 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8"/>
-    <meta name="viewport" contenta width="device-width, initial-scale=1"/>
-    <title>Medicos Disponibles</title>
-    <Link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>Médicos Disponibles</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
 </head>
 <body>
 
-<!--NAVBAR-->
+<!-- NAVBAR -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
     <div class="container-fluid">
         <a class="navbar-brand" href="index.html">Consulta Médicas</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-            aria-controls="navbarllav" aria-expanded="false" aria-label="Toggle navigation">
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item"><a class="nav-link" href="index.html">Inicio</a></li>
-                <li class="nav-iten"><a class="nav-link active" href="medicos.html">Médicos</a></li>
-                <li class="nav-iten"><a class="nav-link" href="citas.html">Mis Citas</a></li>
+                <li class="nav-item"><a class="nav-link active" href="medicos.html">Médicos</a></li>
+                <li class="nav-item"><a class="nav-link" href="citas.html">Mis Citas</a></li>
             </ul>
         </div>
     </div>
 </nav>
 
-<!-- CONTENIDO-->
+<!-- CONTENIDO -->
 <div class="container mt-4">
     <h2 class="mb-3">Médicos disponibles</h2>
     <button id="toggle-btn" class="btn btn-outline-primary mb-3">Mostrar/Ocultar lista</button>
@@ -47,36 +47,57 @@
 
 <!-- FOOTER -->
 <footer class="text-center mt-5 mb-3 text-muted">
-<hr/>
-<p>© 2025 Consulta Médica Online</p>
+    <hr/>
+    <p>© 2025 Consulta Médica Online</p>
 </footer>
+
 <!-- JS -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        async function cargarMedicos() {
-            try {
-                const respuesta = await fetch('http://localhost:8080/medicos');
-                if (!respuesta.ok) throw new Error('Error al obtener los médicos');
-                
-                const medicos = await respuesta.json();
 
-                const lista = document.getElementById('medicos-list');
-                lista.innerHTML = ''; // Limpia la lista actual
+<script>
+    async function cargarMedicos() {
+        try {
+            const respuesta = await fetch('http://localhost:8080/medicos');
+            if (!respuesta.ok) throw new Error('Error al obtener los médicos');
 
-                medicos.forEach(medico => {
-                    const item = document.createElement('li');
-                    item.innerHTML = `<strong>${medico.nombre}</strong> - ${medico.especialidad} <br> <em>${medico.horario}</em>`;
-                    lista.appendChild(item);
-                });
-            } catch (error) {
-                console.error('Error:', error);
-                document.getElementById('medicos-list').innerText = 'No se pudieron cargar los médicos.';
-            }
+            const medicos = await respuesta.json();
+
+            const tabla = document.querySelector('#tabla-medicos tbody');
+            tabla.innerHTML = ''; // Limpiar la tabla
+
+            medicos.forEach(medico => {
+                const fila = document.createElement('tr');
+                fila.innerHTML = `
+                    <td>${medico.nombre}</td>
+                    <td>${medico.especialidad}</td>
+                    <td>${medico.horario}</td>
+                `;
+                tabla.appendChild(fila);
+            });
+        } catch (error) {
+            console.error('Error:', error);
+            const tabla = document.querySelector('#tabla-medicos tbody');
+            tabla.innerHTML = '<tr><td colspan="3">No se pudieron cargar los médicos.</td></tr>';
         }
+    }
 
-        // Llama a la función al cargar la página
-        window.onload = cargarMedicos;
-    </script>
+    // Mostrar/ocultar la lista de médicos
+    document.addEventListener('DOMContentLoaded', () => {
+        document.getElementById('toggle-btn').addEventListener('click', () => {
+            const container = document.getElementById('medicos-container');
+            if (container.style.display === 'none') {
+                container.style.display = 'block';
+                cargarMedicos();
+            } else {
+                container.style.display = 'none';
+            }
+        });
+
+        // También puedes cargar los médicos automáticamente al iniciar si quieres:
+        // cargarMedicos();
+    });
+</script>
+
 </body>
 </html>
