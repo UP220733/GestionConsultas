@@ -86,12 +86,11 @@
     if (!localStorage.getItem('usuario')) {
         window.location.href = 'login.html';
       }
-     =======
     const fecha = new Date();
     const fechaString = fecha.toISOString().slice(0, 10);
 
     angular.module('citasApp', [])
-        .controller('CitasController', function($scope, $http) {
+        .controller('CitasController', function($scope, $http, $filter) {
             $scope.nuevaCita = {
                 medicoId: "",
                 pacienteId: "",
