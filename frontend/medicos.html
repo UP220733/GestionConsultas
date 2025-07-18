@@ -3,26 +3,107 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <title>Médicos Disponibles</title>
+    <title>Médicos Disponibles - Consulta Médica</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"/>
+    <style>
+        body {
+            background: linear-gradient(135deg, #e3f0ff 0%, #f8fbff 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+        .navbar {
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        .navbar-brand {
+            font-weight: bold;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+        }
+        .navbar-brand i {
+            font-size: 1.5rem;
+            margin-right: 8px;
+        }
+        .medicos-container {
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 4px 24px rgba(0, 123, 255, 0.08);
+            padding: 2rem;
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+        }
+        .section-title {
+            color: #007bff;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+        }
+        .section-title i {
+            margin-right: 10px;
+        }
+        .btn-outline-primary {
+            color: #007bff;
+            border-color: #007bff;
+        }
+        .btn-outline-primary:hover {
+            background-color: #007bff;
+            color: white;
+        }
+        .table {
+            margin-top: 1.5rem;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .table thead th {
+            background-color: #007bff;
+            color: white;
+            border: none;
+        }
+        .table tbody tr:hover {
+            background-color: rgba(0, 123, 255, 0.05);
+        }
+        footer {
+            margin-top: 3rem;
+            color: #6c757d;
+        }
+        .card-medico {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s;
+            margin-bottom: 1.5rem;
+        }
+        .card-medico:hover {
+            transform: translateY(-5px);
+        }
+        .card-header {
+            background-color: #007bff;
+            color: white;
+            border-radius: 12px 12px 0 0 !important;
+        }
+    </style>
 </head>
 <body>
 
 <!-- NAVBAR -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
     <div class="container-fluid">
-        <a class="navbar-brand" href="index.html">Consulta Médicas</a>
+        <a class="navbar-brand" href="index.html">
+            <i class="bi bi-hospital"></i> Consulta Médica
+        </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
             aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
-                <li class="nav-item"><a class="nav-link" href="index.html">Inicio</a></li>
-                <li class="nav-item"><a class="nav-link active" href="medicos.html">Médicos</a></li>
-                <li class="nav-item"><a class="nav-link" href="citas.html">Mis Citas</a></li>
+                <li class="nav-item"><a class="nav-link" href="index.html"><i class="bi bi-house-door"></i> Inicio</a></li>
+                <li class="nav-item"><a class="nav-link active" href="medicos.html"><i class="bi bi-person-badge"></i> Médicos</a></li>
+                <li class="nav-item"><a class="nav-link" href="citas.html"><i class="bi bi-calendar-check"></i> Mis Citas</a></li>
                 <li class="nav-item">
-                    <button id="logoutBtn" class="btn btn-outline-light ms-3">Cerrar sesión</button>
+                    <button id="logoutBtn" class="btn btn-outline-light ms-3"><i class="bi bi-box-arrow-right"></i> Cerrar sesión</button>
                 </li>
             </ul>
         </div>
@@ -30,26 +111,34 @@
 </nav>
 
 <!-- CONTENIDO -->
-<div class="container mt-4">
-    <h2 class="mb-3">Médicos disponibles</h2>
-    <button id="toggle-btn" class="btn btn-outline-primary mb-3">Mostrar/Ocultar lista</button>
+<div class="container medicos-container">
+    <h2 class="section-title"><i class="bi bi-people-fill"></i> Médicos disponibles</h2>
+    
+    <button id="toggle-btn" class="btn btn-outline-primary mb-4">
+        <i class="bi bi-list-ul"></i> Mostrar/Ocultar lista
+    </button>
     
     <div id="medicos-container" style="display: none;">
-        <table id="tabla-medicos" class="table table-bordered">
-            <thead class="table-light">
-                <tr>
-                    <th>Nombre</th>
-                    <th>Especialidad</th>
-                    <th>Horario</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
+        <div class="table-responsive">
+            <table id="tabla-medicos" class="table table-hover">
+                <thead>
+                    <tr>
+                        <th><i class="bi bi-person"></i> Nombre</th>
+                        <th><i class="bi bi-clipboard-pulse"></i> Especialidad</th>
+                        <th><i class="bi bi-clock"></i> Horario</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+        
+        <!-- Vista alternativa en cards -->
+        <div id="cards-medicos" class="row mt-4"></div>
     </div>
 </div>
 
 <!-- FOOTER -->
-<footer class="text-center mt-5 mb-3 text-muted">
+<footer class="text-center mb-3 text-muted">
     <hr/>
     <p>© 2025 Consulta Médica Online</p>
 </footer>
@@ -60,9 +149,9 @@
 
 <script>
     // Proteger la página: solo usuarios logueados pueden acceder
-if (!localStorage.getItem('usuario')) {
-    window.location.href = 'login.html';
-}
+    if (!localStorage.getItem('usuario')) {
+        window.location.href = 'login.html';
+    }
 
     async function cargarMedicos() {
         try {
@@ -71,10 +160,16 @@ if (!localStorage.getItem('usuario')) {
 
             const medicos = await respuesta.json();
 
+            // Llenar tabla
             const tabla = document.querySelector('#tabla-medicos tbody');
             tabla.innerHTML = ''; // Limpiar la tabla
 
+            // Llenar cards
+            const cardsContainer = document.getElementById('cards-medicos');
+            cardsContainer.innerHTML = ''; // Limpiar las cards
+
             medicos.forEach(medico => {
+                // Fila para la tabla
                 const fila = document.createElement('tr');
                 fila.innerHTML = `
                     <td>${medico.nombre}</td>
@@ -82,11 +177,30 @@ if (!localStorage.getItem('usuario')) {
                     <td>${medico.horario}</td>
                 `;
                 tabla.appendChild(fila);
+
+                // Card para el médico
+                const card = document.createElement('div');
+                card.className = 'col-md-4';
+                card.innerHTML = `
+                    <div class="card card-medico">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">${medico.nombre}</h5>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text"><strong>Especialidad:</strong> ${medico.especialidad}</p>
+                            <p class="card-text"><strong>Horario:</strong> ${medico.horario}</p>
+                        </div>
+                    </div>
+                `;
+                cardsContainer.appendChild(card);
             });
         } catch (error) {
             console.error('Error:', error);
             const tabla = document.querySelector('#tabla-medicos tbody');
-            tabla.innerHTML = '<tr><td colspan="3">No se pudieron cargar los médicos.</td></tr>';
+            tabla.innerHTML = '<tr><td colspan="3" class="text-center">No se pudieron cargar los médicos.</td></tr>';
+            
+            const cardsContainer = document.getElementById('cards-medicos');
+            cardsContainer.innerHTML = '<div class="col-12 text-center">No se pudieron cargar los médicos.</div>';
         }
     }
 
@@ -101,15 +215,12 @@ if (!localStorage.getItem('usuario')) {
                 container.style.display = 'none';
             }
         });
-
-        // También puedes cargar los médicos automáticamente al iniciar si quieres:
-        // cargarMedicos();
     });
 
     document.getElementById('logoutBtn').addEventListener('click', function() {
-    localStorage.removeItem('usuario');
-    window.location.href = 'login.html';
-});
+        localStorage.removeItem('usuario');
+        window.location.href = 'login.html';
+    });
 </script>
 
 </body>
